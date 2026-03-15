@@ -1,455 +1,663 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fairoz CP — DevOps Engineer</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --surface: #111118;
-    --card: #16161f;
-    --border: rgba(255,255,255,0.07);
-    --border-glow: rgba(0,220,180,0.25);
-    --accent: #00dca0;
-    --accent2: #7c6df2;
-    --accent3: #ff6b6b;
-    --text: #f0f0f8;
-    --muted: #7a7a90;
-    --mono: 'JetBrains Mono', monospace;
-    --display: 'Syne', sans-serif;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text); font-family: var(--display); overflow-x: hidden; line-height: 1.6; }
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 9999; opacity: 0.4;
-  }
-  .grid-bg {
-    position: fixed; inset: 0;
-    background-image: linear-gradient(rgba(0,220,160,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(0,220,160,0.03) 1px,transparent 1px);
-    background-size: 60px 60px; pointer-events: none; z-index: 0;
-  }
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1.25rem 3rem;
-    background: rgba(10,10,15,0.85); backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-logo { font-family: var(--mono); font-size: 0.85rem; color: var(--accent); letter-spacing: 0.05em; }
-  .nav-logo span { color: var(--muted); }
-  nav ul { list-style: none; display: flex; gap: 2.5rem; }
-  nav a { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; position: relative; }
-  nav a::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 1px; background: var(--accent); transform: scaleX(0); transition: transform 0.2s; }
-  nav a:hover { color: var(--accent); }
-  nav a:hover::after { transform: scaleX(1); }
-  section { position: relative; z-index: 1; }
+:root{--bg:#07090e;--surface:#0c1018;--card:#111620;--border:rgba(255,255,255,.065);--glow:rgba(0,210,255,.28);--ac:#00d2ff;--ac-dim:rgba(0,210,255,.1);--a2:#ff6b35;--a3:#7cffa4;--tx:#e6edf8;--tx2:#b8c5d6;--mu:#5e6f84;--mono:'Fira Code',monospace;--sans:'Manrope',sans-serif;--r:10px;--t:.28s cubic-bezier(.4,0,.2,1)}
+[data-theme="light"]{--bg:#eef2f7;--surface:#e0e8f0;--card:#fff;--border:rgba(0,0,0,.08);--glow:rgba(0,110,200,.25);--ac:#006eca;--ac-dim:rgba(0,110,200,.09);--a2:#d4521e;--a3:#1a9e42;--tx:#0d1420;--tx2:#2c3e55;--mu:#607080}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:var(--sans);overflow-x:hidden;line-height:1.6;transition:background var(--t),color var(--t)}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--ac);border-radius:4px}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;mix-blend-mode:overlay}
+.grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(0,210,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(0,210,255,.022) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;z-index:0}
+[data-theme="light"] .grid-bg{background-image:linear-gradient(rgba(0,110,200,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,110,200,.05) 1px,transparent 1px)}
 
-  /* HERO */
-  #hero { min-height: 100vh; display: flex; align-items: center; padding: 8rem 3rem 4rem; position: relative; overflow: hidden; }
-  .hero-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle,rgba(0,220,160,0.08) 0%,transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; }
-  .hero-content { max-width: 900px; position: relative; }
-  .hero-tag { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.75rem; color: var(--accent); border: 1px solid var(--border-glow); padding: 0.4rem 0.9rem; border-radius: 2rem; margin-bottom: 2rem; letter-spacing: 0.05em; }
-  .hero-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s ease-in-out infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.8)} }
-  .hero-name { font-size: clamp(3.5rem,9vw,7.5rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 1.5rem; }
-  .hero-name .line2 { color: transparent; -webkit-text-stroke: 1.5px rgba(240,240,248,0.35); }
-  .hero-title { font-family: var(--mono); font-size: 1.05rem; color: var(--muted); margin-bottom: 1.5rem; letter-spacing: 0.02em; }
-  .hero-title .hl { color: var(--accent); }
-  .hero-desc { font-size: 1.05rem; color: var(--muted); max-width: 540px; line-height: 1.75; margin-bottom: 2.5rem; }
-  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
-  .btn { font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.85rem 1.75rem; border-radius: 4px; text-decoration: none; transition: all 0.2s; cursor: pointer; display: inline-block; }
-  .btn-primary { background: var(--accent); color: #0a0a0f; font-weight: 500; border: 1px solid var(--accent); }
-  .btn-primary:hover { background: transparent; color: var(--accent); box-shadow: 0 0 24px rgba(0,220,160,0.2); }
-  .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
-  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(7,9,14,.84);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);transition:background var(--t)}
+[data-theme="light"] nav{background:rgba(238,242,247,.88)}
+.nav-logo{font-family:var(--mono);font-size:.82rem;color:var(--ac);letter-spacing:.04em}
+.nav-logo .sl{color:var(--mu)}
+nav ul{list-style:none;display:flex;gap:1.8rem;align-items:center}
+nav a{font-family:var(--mono);font-size:.7rem;color:var(--mu);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color var(--t);position:relative}
+nav a::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:1px;background:var(--ac);transform:scaleX(0);transform-origin:left;transition:transform var(--t)}
+nav a:hover{color:var(--ac)}nav a:hover::after{transform:scaleX(1)}
+.theme-btn{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:.32rem .7rem;cursor:pointer;font-size:.9rem;transition:all var(--t);display:flex;align-items:center;color:var(--tx)}
+.theme-btn:hover{border-color:var(--ac);background:var(--ac-dim)}
 
-  /* TERMINAL */
-  .hero-terminal { position: absolute; right: 3rem; top: 50%; transform: translateY(-50%); width: 390px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; display: none; }
-  @media (min-width: 1100px) { .hero-terminal { display: block; } }
-  .terminal-bar { background: var(--surface); padding: 0.6rem 1rem; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid var(--border); }
-  .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .dot-r { background: #ff5f56; } .dot-y { background: #ffbd2e; } .dot-g { background: #27c93f; }
-  .terminal-title { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); margin-left: 0.5rem; }
-  .terminal-body { padding: 1.25rem; font-family: var(--mono); font-size: 0.78rem; line-height: 2; }
-  .t-prompt { color: var(--accent); } .t-cmd { color: var(--text); } .t-out { color: var(--muted); }
-  .t-green { color: #27c93f; } .t-blue { color: #64b5f6; } .t-yellow { color: #ffbd2e; }
-  .t-cursor { display: inline-block; width: 8px; height: 14px; background: var(--accent); animation: blink 1s step-end infinite; vertical-align: middle; margin-left: 2px; }
-  @keyframes blink { 0%,100%{opacity:1}50%{opacity:0} }
+/* HERO */
+section{position:relative;z-index:1}
+#hero{min-height:100vh;display:flex;align-items:center;padding:8rem 2.5rem 5rem;overflow:hidden}
+.hga{position:absolute;width:680px;height:680px;border-radius:50%;background:radial-gradient(circle,rgba(0,210,255,.07) 0%,transparent 65%);top:15%;left:-80px;pointer-events:none;animation:da 14s ease-in-out infinite alternate}
+.hgb{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,53,.055) 0%,transparent 65%);bottom:5%;right:3%;pointer-events:none;animation:db 11s ease-in-out infinite alternate}
+@keyframes da{from{transform:translate(0,0)}to{transform:translate(50px,-35px)}}
+@keyframes db{from{transform:translate(0,0)}to{transform:translate(-35px,25px)}}
+.hero-wrap{display:grid;grid-template-columns:1fr 460px;gap:3.5rem;align-items:center;max-width:1180px;margin:0 auto;width:100%}
+.hbadge{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.7rem;color:var(--a3);background:rgba(124,255,164,.07);border:1px solid rgba(124,255,164,.2);padding:.36rem .9rem;border-radius:20px;margin-bottom:1.8rem;letter-spacing:.06em}
+[data-theme="light"] .hbadge{color:var(--a3);background:rgba(26,158,66,.08);border-color:rgba(26,158,66,.22)}
+.bdot{width:6px;height:6px;border-radius:50%;background:var(--a3);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
+.hname{font-size:clamp(3.2rem,8vw,6.5rem);font-weight:900;line-height:.93;letter-spacing:-.04em;margin-bottom:1.3rem}
+.hname .out{color:transparent;-webkit-text-stroke:1.5px rgba(0,210,255,.38)}
+[data-theme="light"] .hname .out{-webkit-text-stroke:1.5px rgba(0,110,200,.45)}
+.trow{font-family:var(--mono);font-size:.97rem;color:var(--mu);margin-bottom:1.4rem;min-height:1.6em;display:flex;align-items:center;gap:.4rem}
+.tpfx{color:var(--ac)}
+.cur{display:inline-block;width:2px;height:1em;background:var(--ac);margin-left:2px;animation:bl .9s step-end infinite;vertical-align:middle}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:0}}
+.hdesc{font-size:1rem;color:var(--mu);max-width:510px;line-height:1.82;margin-bottom:2.4rem}
+.hcta{display:flex;gap:.85rem;flex-wrap:wrap}
+.btn{font-family:var(--mono);font-size:.76rem;letter-spacing:.07em;text-transform:uppercase;padding:.82rem 1.65rem;border-radius:var(--r);text-decoration:none;transition:all var(--t);cursor:pointer;display:inline-flex;align-items:center;gap:.45rem;border:none;white-space:nowrap}
+.bp{background:var(--ac);color:#07090e;font-weight:700;box-shadow:0 0 22px rgba(0,210,255,.22)}
+.bp:hover{background:transparent;color:var(--ac);outline:1px solid var(--ac);box-shadow:0 0 32px rgba(0,210,255,.3)}
+.bg{background:transparent;color:var(--tx);border:1px solid var(--border)}
+.bg:hover{border-color:var(--ac);color:var(--ac);background:var(--ac-dim)}
+.bo{background:var(--a2);color:#fff;font-weight:700;box-shadow:0 0 20px rgba(255,107,53,.18)}
+.bo:hover{opacity:.82;transform:translateY(-1px)}
 
-  /* ABOUT */
-  #about { padding: 7rem 3rem; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-  .section-label { font-family: var(--mono); font-size: 0.7rem; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
-  .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
-  .section-title { font-size: clamp(2rem,4vw,3rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
-  .about-text { color: var(--muted); line-height: 1.8; font-size: 1rem; }
-  .about-text p + p { margin-top: 1rem; }
-  .cert-badges { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
-  .cert-badge { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.68rem; color: var(--accent2); background: rgba(124,109,242,0.08); border: 1px solid rgba(124,109,242,0.2); padding: 0.4rem 0.8rem; border-radius: 4px; letter-spacing: 0.04em; }
-  .cert-badge::before { content: '✦'; font-size: 0.6rem; }
-  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-  .stat { background: var(--card); padding: 1.75rem; }
-  .stat-num { font-size: 2.5rem; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 0.4rem; letter-spacing: -0.02em; }
-  .stat-label { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+/* HERO VISUAL */
+.hvis{display:flex;align-items:center;justify-content:center}
+.hvis svg{filter:drop-shadow(0 0 28px rgba(0,210,255,.14))}
+@keyframes rCW{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes rCCW{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+@keyframes fy{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes df{from{stroke-dashoffset:60}to{stroke-dashoffset:0}}
+@keyframes gp{0%,100%{opacity:.65}50%{opacity:1}}
+.rcw{animation:rCW 22s linear infinite;transform-origin:200px 200px}
+.rccw{animation:rCCW 16s linear infinite;transform-origin:200px 200px}
+.cf{animation:fy 4.5s ease-in-out infinite;transform-origin:200px 200px}
+.fp{stroke-dasharray:18 70;animation:df 2.2s linear infinite}
+.gpl{animation:gp 3s ease-in-out infinite}
 
-  /* SKILLS */
-  #skills { padding: 7rem 3rem; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .skills-inner { max-width: 1100px; margin: 0 auto; }
-  .skills-header { text-align: center; margin-bottom: 4rem; }
-  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 1.5rem; }
-  .skill-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.75rem; transition: border-color 0.2s,transform 0.2s; position: relative; overflow: hidden; }
-  .skill-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at top left,rgba(0,220,160,0.05),transparent 70%); pointer-events: none; }
-  .skill-card:hover { border-color: var(--border-glow); transform: translateY(-3px); }
-  .skill-cat-icon { font-size: 1.75rem; margin-bottom: 1rem; display: block; }
-  .skill-cat-name { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
-  .skill-cat-sub { font-family: var(--mono); font-size: 0.7rem; color: var(--accent); margin-bottom: 1.25rem; letter-spacing: 0.05em; }
-  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-  .tag { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); background: rgba(255,255,255,0.04); border: 1px solid var(--border); padding: 0.3rem 0.65rem; border-radius: 3px; letter-spacing: 0.03em; }
-  .tag.accent { color: var(--accent); border-color: rgba(0,220,160,0.2); background: rgba(0,220,160,0.05); }
-  .tag.purple { color: var(--accent2); border-color: rgba(124,109,242,0.2); background: rgba(124,109,242,0.05); }
-  .tag.red { color: var(--accent3); border-color: rgba(255,107,107,0.2); background: rgba(255,107,107,0.05); }
+/* STATS */
+.stats-strip{position:relative;z-index:1;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:2.2rem 2.5rem}
+.stats-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.si{background:var(--surface);padding:1.5rem 1.75rem;text-align:center;transition:background var(--t)}
+.si:hover{background:var(--card)}
+.sn{font-size:2.3rem;font-weight:900;color:var(--ac);letter-spacing:-.03em;line-height:1;margin-bottom:.3rem}
+.sl2{font-family:var(--mono);font-size:.65rem;color:var(--mu);text-transform:uppercase;letter-spacing:.1em}
 
-  /* EXPERIENCE */
-  #experience { padding: 7rem 3rem; max-width: 1100px; margin: 0 auto; }
-  .exp-header { margin-bottom: 4rem; }
-  .timeline { position: relative; padding-left: 2rem; }
-  .timeline::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 0; width: 1px; background: linear-gradient(to bottom,var(--accent),transparent); }
-  .exp-item { position: relative; padding-bottom: 3.5rem; padding-left: 2rem; }
-  .exp-item:last-child { padding-bottom: 0; }
-  .exp-dot { position: absolute; left: -2.45rem; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); box-shadow: 0 0 12px rgba(0,220,160,0.5); }
-  .exp-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
-  .exp-period { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); letter-spacing: 0.05em; background: rgba(0,220,160,0.08); padding: 0.25rem 0.65rem; border-radius: 3px; border: 1px solid rgba(0,220,160,0.15); }
-  .exp-company { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); letter-spacing: 0.05em; }
-  .exp-role { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text); }
-  .exp-bullets { color: var(--muted); font-size: 0.88rem; line-height: 1.85; margin-bottom: 1.25rem; max-width: 700px; list-style: none; padding: 0; }
-  .exp-bullets li { padding-left: 1.25rem; position: relative; margin-bottom: 0.35rem; }
-  .exp-bullets li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); font-size: 0.7rem; top: 0.18rem; }
-  .exp-highlights { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+/* SECTION */
+.lbl{font-family:var(--mono);font-size:.67rem;color:var(--ac);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.85rem;display:flex;align-items:center;gap:.7rem}
+.lbl::before{content:'';display:block;width:18px;height:1px;background:var(--ac)}
+.sh{font-size:clamp(1.85rem,3.5vw,2.75rem);font-weight:900;line-height:1.08;letter-spacing:-.025em;margin-bottom:1.2rem}
 
-  /* CONTACT */
-  #contact { padding: 7rem 3rem; background: var(--surface); border-top: 1px solid var(--border); text-align: center; }
-  .contact-inner { max-width: 620px; margin: 0 auto; }
-  .contact-headline { font-size: clamp(2.5rem,5vw,4rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1.25rem; }
-  .contact-headline .hl { color: transparent; -webkit-text-stroke: 1.5px var(--accent); }
-  .contact-sub { color: var(--muted); font-size: 1rem; margin-bottom: 2.5rem; line-height: 1.7; }
-  .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
-  .contact-link { display: inline-flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); text-decoration: none; border: 1px solid var(--border); padding: 0.75rem 1.25rem; border-radius: 4px; transition: all 0.2s; letter-spacing: 0.04em; }
-  .contact-link:hover { color: var(--accent); border-color: var(--border-glow); background: rgba(0,220,160,0.04); }
-  .contact-link svg { width: 16px; height: 16px; fill: currentColor; flex-shrink: 0; }
+/* ABOUT */
+#about{padding:6.5rem 2.5rem;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.1fr .9fr;gap:5rem;align-items:start}
+.atxt{color:var(--mu);line-height:1.9;font-size:.97rem}
+.atxt p+p{margin-top:1rem}
+.cert-row{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.5rem}
+.cbadge{display:inline-flex;align-items:center;gap:.45rem;font-family:var(--mono);font-size:.65rem;color:var(--a2);background:rgba(255,107,53,.07);border:1px solid rgba(255,107,53,.22);padding:.38rem .75rem;border-radius:4px;letter-spacing:.04em}
+.cbadge svg{width:12px;height:12px;fill:var(--a2)}
+.tlm{position:relative;padding-left:1.4rem}
+.tlm::before{content:'';position:absolute;left:0;top:8px;bottom:0;width:1px;background:linear-gradient(to bottom,var(--ac),transparent)}
+.tli{position:relative;padding-bottom:2rem;padding-left:1.4rem}
+.tli:last-child{padding-bottom:0}
+.tld{position:absolute;left:-1.85rem;top:5px;width:9px;height:9px;border-radius:50%;background:var(--ac);border:2px solid var(--bg);box-shadow:0 0 10px rgba(0,210,255,.65)}
+.tldate{font-family:var(--mono);font-size:.63rem;color:var(--ac);background:var(--ac-dim);padding:.2rem .5rem;border-radius:3px;display:inline-block;margin-bottom:.35rem}
+.tlrole{font-weight:800;font-size:.93rem;margin-bottom:.18rem}
+.tlco{font-family:var(--mono);font-size:.65rem;color:var(--mu)}
 
-  footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 0.7rem; color: var(--muted); position: relative; z-index: 1; }
+/* SKILL BADGES STRIP */
+#bstrip{padding:2.5rem 2.5rem;overflow:hidden;position:relative;z-index:1;border-bottom:1px solid var(--border)}
+.bstitle{font-family:var(--mono);font-size:.63rem;color:var(--mu);text-align:center;letter-spacing:.15em;text-transform:uppercase;margin-bottom:1.8rem}
+.bscroll{display:flex;gap:1rem;width:max-content;animation:sL 30s linear infinite}
+.bscroll:hover{animation-play-state:paused}
+@keyframes sL{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tbadge{display:flex;flex-direction:column;align-items:center;gap:.45rem;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:.9rem .85rem;min-width:78px;transition:border-color var(--t),transform var(--t);cursor:default;flex-shrink:0}
+.tbadge:hover{border-color:var(--glow);transform:translateY(-4px)}
+.tbadge svg{width:36px;height:36px;filter:drop-shadow(0 3px 8px rgba(0,0,0,.4))}
+.tbadge span{font-family:var(--mono);font-size:.58rem;color:var(--mu);letter-spacing:.04em;white-space:nowrap}
 
-  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-  .fade-in.visible { opacity: 1; transform: none; }
+/* SKILLS */
+#skills{padding:6.5rem 2.5rem;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.swrap{max-width:1100px;margin:0 auto}
+.tabrow{display:flex;gap:.45rem;margin-top:1.8rem;flex-wrap:wrap}
+.tbtn{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:.42rem .95rem;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--mu);cursor:pointer;transition:all var(--t)}
+.tbtn.on,.tbtn:hover{border-color:var(--ac);color:var(--ac);background:var(--ac-dim)}
+.spanel{display:none}.spanel.on{display:block;animation:fU .3s ease}
+@keyframes fU{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:1.2rem;margin-top:2rem}
+.scard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem;transition:border-color var(--t),transform var(--t),box-shadow var(--t);position:relative;overflow:hidden;cursor:default}
+.scard::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 20%,rgba(0,210,255,.04),transparent 60%);pointer-events:none}
+.scard::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--ac),transparent);opacity:0;transition:opacity var(--t)}
+.scard:hover{border-color:var(--glow);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,210,255,.08)}
+.scard:hover::after{opacity:1}
+.siw{width:52px;height:52px;margin-bottom:1rem;filter:drop-shadow(0 4px 12px rgba(0,210,255,.22))}
+.sname{font-weight:800;font-size:.95rem;margin-bottom:.22rem}
+.ssub{font-family:var(--mono);font-size:.63rem;color:var(--ac);margin-bottom:1.1rem;letter-spacing:.06em}
+.tags{display:flex;flex-wrap:wrap;gap:.32rem}
+.tag{font-family:var(--mono);font-size:.62rem;color:var(--mu);background:rgba(255,255,255,.04);border:1px solid var(--border);padding:.23rem .58rem;border-radius:3px;transition:all .15s}
+[data-theme="light"] .tag{background:rgba(0,0,0,.04)}
+.tag:hover{background:var(--ac-dim);border-color:var(--ac);color:var(--ac)}
+.tag.a{color:var(--ac);border-color:rgba(0,210,255,.25);background:rgba(0,210,255,.07)}
+.tag.b{color:var(--a2);border-color:rgba(255,107,53,.25);background:rgba(255,107,53,.07)}
+.tag.c{color:var(--a3);border-color:rgba(124,255,164,.25);background:rgba(124,255,164,.07)}
+[data-theme="light"] .tag.c{color:var(--a3);border-color:rgba(26,158,66,.25);background:rgba(26,158,66,.07)}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.4rem;margin-top:2rem}
+.bi .bh{display:flex;justify-content:space-between;margin-bottom:.45rem}
+.bi .bn{font-size:.85rem;font-weight:700}
+.bi .bp2{font-family:var(--mono);font-size:.68rem;color:var(--ac)}
+.btrack{height:5px;background:var(--border);border-radius:10px;overflow:hidden}
+.bfill{height:100%;border-radius:10px;background:linear-gradient(to right,var(--ac),rgba(0,210,255,.45));width:0;transition:width 1.35s cubic-bezier(.25,.46,.45,.94)}
+.bfill.b{background:linear-gradient(to right,var(--a2),rgba(255,107,53,.45))}
+.bfill.c{background:linear-gradient(to right,var(--a3),rgba(124,255,164,.45))}
 
-  @media (max-width: 768px) {
-    #about { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 1.5rem; }
-    nav { padding: 1rem 1.5rem; }
-    nav ul { gap: 1.2rem; }
-    #hero { padding: 7rem 1.5rem 3rem; }
-    .hero-terminal { display: none !important; }
-    #skills, #contact, #experience { padding: 5rem 1.5rem; }
-    footer { padding: 1.5rem; flex-direction: column; gap: 1rem; text-align: center; }
-  }
+/* PIPELINE */
+#pipeline{padding:5.5rem 2.5rem;max-width:1100px;margin:0 auto;text-align:center}
+.psvg{display:block;margin:2.5rem auto 0;filter:drop-shadow(0 0 18px rgba(0,210,255,.1))}
+.pnode rect,.pnode-o rect,.pnode-g rect{transition:fill .2s}
+.pnode:hover rect{fill:rgba(0,210,255,.12)!important}
+.pnode-o:hover rect{fill:rgba(255,107,53,.12)!important}
+.pnode-g:hover rect{fill:rgba(124,255,164,.12)!important}
+
+/* EXPERIENCE */
+#experience{padding:6.5rem 2.5rem;max-width:1100px;margin:0 auto}
+.tml{position:relative;padding-left:2rem;margin-top:3rem}
+.tml::before{content:'';position:absolute;left:0;top:10px;bottom:0;width:1px;background:linear-gradient(to bottom,var(--ac),rgba(0,210,255,.05))}
+.ei{position:relative;padding-bottom:3.5rem;padding-left:2.5rem}
+.ei:last-child{padding-bottom:0}
+.edot{position:absolute;left:-2.5rem;top:6px;width:12px;height:12px;border-radius:50%;background:var(--ac);border:3px solid var(--bg);box-shadow:0 0 14px rgba(0,210,255,.65);transition:box-shadow var(--t)}
+.ei:hover .edot{box-shadow:0 0 22px rgba(0,210,255,.95)}
+.emeta{display:flex;align-items:center;gap:.7rem;margin-bottom:.55rem;flex-wrap:wrap}
+.eperiod{font-family:var(--mono);font-size:.66rem;color:var(--ac);background:var(--ac-dim);border:1px solid rgba(0,210,255,.18);padding:.22rem .6rem;border-radius:4px;letter-spacing:.05em}
+.eco{font-family:var(--mono);font-size:.65rem;color:var(--mu)}
+.erole{font-size:1.3rem;font-weight:900;letter-spacing:-.02em;margin-bottom:.85rem}
+.ecard{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem 1.65rem;transition:border-color var(--t),box-shadow var(--t)}
+.ecard:hover{border-color:var(--glow);box-shadow:0 8px 36px rgba(0,210,255,.07)}
+.eul{list-style:none;padding:0;color:var(--mu);font-size:.86rem;line-height:1.9;margin-bottom:1.2rem}
+.eul li{padding-left:1.15rem;position:relative;margin-bottom:.18rem}
+.eul li::before{content:'▸';position:absolute;left:0;color:var(--ac);font-size:.62rem;top:.23rem}
+.etags{display:flex;flex-wrap:wrap;gap:.32rem;padding-top:.9rem;border-top:1px solid var(--border);margin-top:.3rem}
+
+/* CONTACT */
+#contact{padding:6.5rem 2.5rem;background:var(--surface);border-top:1px solid var(--border);text-align:center}
+.cwrap{max-width:660px;margin:0 auto}
+.ch{font-size:clamp(2.4rem,5vw,3.9rem);font-weight:900;line-height:1.04;letter-spacing:-.03em;margin-bottom:1.1rem}
+.ch .hl{background:linear-gradient(135deg,var(--ac),var(--a2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.csub{color:var(--mu);font-size:.97rem;margin-bottom:2.4rem;line-height:1.78}
+.clgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-bottom:1.8rem}
+.clink{display:flex;flex-direction:column;align-items:center;gap:.45rem;font-family:var(--mono);font-size:.68rem;color:var(--mu);text-decoration:none;border:1px solid var(--border);padding:1.1rem .7rem;border-radius:var(--r);transition:all var(--t)}
+.clink svg{width:22px;height:22px;fill:currentColor;transition:transform var(--t)}
+.clink:hover{color:var(--ac);border-color:var(--glow);background:var(--ac-dim)}
+.clink:hover svg{transform:scale(1.2)}
+.clink span{font-size:.62rem;word-break:break-all;text-align:center}
+footer{border-top:1px solid var(--border);padding:1.6rem 2.5rem;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.66rem;color:var(--mu);position:relative;z-index:1}
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease}
+.fade-in.vis{opacity:1;transform:none}
+@media(max-width:1020px){.hero-wrap{grid-template-columns:1fr}.hvis{display:none}#about{grid-template-columns:1fr;gap:3rem}}
+@media(max-width:768px){nav{padding:.9rem 1.4rem}nav ul{gap:1rem}.hsm{display:none}#hero{padding:7rem 1.4rem 3rem}#about,#experience,#skills,#contact,#pipeline,#bstrip{padding:4.5rem 1.4rem}.stats-inner{grid-template-columns:repeat(2,1fr)}.clgrid{grid-template-columns:1fr 1fr}footer{padding:1.4rem;flex-direction:column;gap:.9rem;text-align:center}}
+@media(max-width:480px){.sgrid{grid-template-columns:1fr}.clgrid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-
 <div class="grid-bg"></div>
 
 <nav>
-  <div class="nav-logo"><span>~/</span>fairoz<span>.sh</span></div>
+  <div class="nav-logo"><span class="sl">~/</span>fairoz<span class="sl">.sh</span></div>
   <ul>
-    <li><a href="#about">About</a></li>
+    <li class="hsm"><a href="#about">About</a></li>
     <li><a href="#skills">Skills</a></li>
-    <li><a href="#experience">Experience</a></li>
+    <li><a href="#experience">Work</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><button class="theme-btn" id="tBtn" aria-label="Toggle theme"><span id="tIco">🌙</span></button></li>
   </ul>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-content">
-    <div class="hero-tag">Open to new opportunities</div>
-    <h1 class="hero-name">
-      Fairoz<br>
-      <span class="line2">CP</span>
-    </h1>
-    <p class="hero-title">
-      <span class="hl">DevOps Engineer</span> &nbsp;/&nbsp; Cloud Infrastructure &nbsp;/&nbsp; CI/CD &amp; IaC
-    </p>
-    <p class="hero-desc">
-      6+ years building resilient multi-cloud infrastructure, automating deployments, and driving DevOps transformation across Azure, AWS, and Kubernetes environments.
-    </p>
-    <div class="hero-cta">
-      <a href="#experience" class="btn btn-primary">View Experience</a>
-      <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+  <div class="hga"></div><div class="hgb"></div>
+  <div class="hero-wrap">
+    <div>
+      <div class="hbadge"><div class="bdot"></div> Available for New Opportunities</div>
+      <h1 class="hname">Fairoz<br><span class="out">CP</span></h1>
+      <div class="trow"><span class="tpfx">$&gt;&nbsp;</span><span id="tTxt"></span><span class="cur"></span></div>
+      <p class="hdesc">6+ years building resilient multi-cloud infrastructure, automating deployments, and driving DevOps transformation across Azure, AWS, and Kubernetes environments.</p>
+      <div class="hcta">
+        <a href="#experience" class="btn bp">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          View Experience
+        </a>
+        <a href="#contact" class="btn bg">Get in Touch</a>
+        <a href="#" class="btn bo" id="cvBtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download CV
+        </a>
+      </div>
     </div>
-  </div>
 
-  <div class="hero-terminal">
-    <div class="terminal-bar">
-      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
-      <span class="terminal-title">fairoz@devops ~ zsh</span>
-    </div>
-    <div class="terminal-body">
-      <div><span class="t-prompt">❯ </span><span class="t-cmd">terraform apply -auto-approve</span></div>
-      <div class="t-out">Plan: 5 to add, 2 to change...</div>
-      <div class="t-green">Apply complete! Resources: 5 added.</div>
-      <div>&nbsp;</div>
-      <div><span class="t-prompt">❯ </span><span class="t-cmd">kubectl get nodes -o wide</span></div>
-      <div class="t-out">NAME &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; STATUS &nbsp; ROLES</div>
-      <div class="t-green">aks-prod-01 &nbsp; Ready &nbsp;&nbsp; worker</div>
-      <div class="t-green">aks-prod-02 &nbsp; Ready &nbsp;&nbsp; worker</div>
-      <div>&nbsp;</div>
-      <div><span class="t-prompt">❯ </span><span class="t-cmd">az devops pipeline run</span></div>
-      <div class="t-yellow">Pipeline #247 triggered ✓</div>
-      <div class="t-green">Deploy time reduced by 30%</div>
-      <div>&nbsp;</div>
-      <div><span class="t-prompt">❯ </span><span class="t-cursor"></span></div>
+    <!-- 3D DEVOPS LOOP -->
+    <div class="hvis">
+      <svg viewBox="0 0 400 400" width="420" height="420" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="bgRg" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#00d2ff" stop-opacity=".09"/><stop offset="100%" stop-color="#00d2ff" stop-opacity="0"/></radialGradient>
+          <filter id="glow3" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="shad" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="5" stdDeviation="6" flood-color="#000" flood-opacity=".55"/></filter>
+          <linearGradient id="gB" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1e3a4a"/><stop offset="100%" stop-color="#0a1520"/></linearGradient>
+          <linearGradient id="gO" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3a2010"/><stop offset="100%" stop-color="#1a0e06"/></linearGradient>
+          <linearGradient id="gG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0e3020"/><stop offset="100%" stop-color="#061810"/></linearGradient>
+          <linearGradient id="gAcc" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00d2ff"/><stop offset="100%" stop-color="#ff6b35"/></linearGradient>
+        </defs>
+        <circle cx="200" cy="200" r="195" fill="url(#bgRg)"/>
+        <!-- rings -->
+        <g class="rcw"><circle cx="200" cy="200" r="170" fill="none" stroke="rgba(0,210,255,.1)" stroke-width="1"/><circle cx="200" cy="200" r="170" fill="none" stroke="rgba(0,210,255,.22)" stroke-width="1" stroke-dasharray="10 6"/><circle cx="200" cy="30" r="4" fill="rgba(0,210,255,.5)"/><circle cx="370" cy="200" r="4" fill="rgba(255,107,53,.5)"/><circle cx="200" cy="370" r="4" fill="rgba(124,255,164,.5)"/><circle cx="30" cy="200" r="4" fill="rgba(0,210,255,.5)"/></g>
+        <g class="rccw"><circle cx="200" cy="200" r="108" fill="none" stroke="rgba(255,107,53,.1)" stroke-width="1"/><circle cx="200" cy="200" r="108" fill="none" stroke="rgba(255,107,53,.22)" stroke-width="1" stroke-dasharray="7 7"/></g>
+        <!-- flow arcs -->
+        <g fill="none"><path d="M200 30 C290 30,370 110,370 200" stroke="rgba(0,210,255,.14)" stroke-width="1.5"/><path d="M370 200 C370 290,290 370,200 370" stroke="rgba(0,210,255,.14)" stroke-width="1.5"/><path d="M200 370 C110 370,30 290,30 200" stroke="rgba(0,210,255,.14)" stroke-width="1.5"/><path d="M30 200 C30 110,110 30,200 30" stroke="rgba(0,210,255,.14)" stroke-width="1.5"/></g>
+        <path class="fp" d="M200 30 C290 30,370 110,370 200" stroke="rgba(0,210,255,.65)" stroke-width="2" fill="none"/>
+        <path class="fp" d="M370 200 C370 290,290 370,200 370" stroke="rgba(255,107,53,.65)" stroke-width="2" fill="none" style="animation-delay:.6s"/>
+        <path class="fp" d="M200 370 C110 370,30 290,30 200" stroke="rgba(0,210,255,.65)" stroke-width="2" fill="none" style="animation-delay:1.2s"/>
+        <path class="fp" d="M30 200 C30 110,110 30,200 30" stroke="rgba(255,107,53,.65)" stroke-width="2" fill="none" style="animation-delay:1.8s"/>
+
+        <!-- NODE: PLAN -->
+        <g transform="translate(200,32)" filter="url(#shad)">
+          <rect x="-27" y="-27" width="54" height="54" rx="13" fill="url(#gB)" stroke="rgba(0,210,255,.6)" stroke-width="1.5"/>
+          <rect x="-25" y="-25" width="50" height="9" rx="8" fill="rgba(255,255,255,.06)"/>
+          <rect x="-12" y="-17" width="24" height="28" rx="3" fill="none" stroke="rgba(0,210,255,.8)" stroke-width="1.5"/>
+          <rect x="-7" y="-20" width="14" height="7" rx="3" fill="rgba(0,210,255,.6)"/>
+          <line x1="-7" y1="-5" x2="7" y2="-5" stroke="rgba(0,210,255,.55)" stroke-width="1.2"/>
+          <line x1="-7" y1="-1" x2="7" y2="-1" stroke="rgba(0,210,255,.55)" stroke-width="1.2"/>
+          <line x1="-7" y1="3" x2="3" y2="3" stroke="rgba(0,210,255,.4)" stroke-width="1.2"/>
+          <text y="21" text-anchor="middle" font-family="Fira Code,monospace" font-size="7" fill="rgba(0,210,255,.9)" letter-spacing=".5">PLAN</text>
+        </g>
+        <!-- NODE: CODE -->
+        <g transform="translate(322,78)" filter="url(#shad)">
+          <rect x="-27" y="-27" width="54" height="54" rx="13" fill="url(#gB)" stroke="rgba(0,210,255,.6)" stroke-width="1.5"/>
+          <rect x="-25" y="-25" width="50" height="9" rx="8" fill="rgba(255,255,255,.06)"/>
+          <polyline points="-12,-12 -18,0 -12,12" fill="none" stroke="rgba(0,210,255,.85)" stroke-width="2.2" stroke-linejoin="round"/>
+          <polyline points="12,-12 18,0 12,12" fill="none" stroke="rgba(0,210,255,.85)" stroke-width="2.2" stroke-linejoin="round"/>
+          <line x1="-4" y1="-14" x2="4" y2="14" stroke="rgba(0,210,255,.4)" stroke-width="1.5"/>
+          <text y="21" text-anchor="middle" font-family="Fira Code,monospace" font-size="7" fill="rgba(0,210,255,.9)" letter-spacing=".5">CODE</text>
+        </g>
+        <!-- NODE: BUILD -->
+        <g transform="translate(368,200)" filter="url(#shad)">
+          <rect x="-27" y="-27" width="54" height="54" rx="13" fill="url(#gO)" stroke="rgba(255,107,53,.6)" stroke-width="1.5"/>
+          <rect x="-25" y="-25" width="50" height="9" rx="8" fill="rgba(255,255,255,.05)"/>
+          <circle cx="0" cy="-4" r="10" fill="none" stroke="rgba(255,107,53,.85)" stroke-width="1.8"/>
+          <circle cx="0" cy="-4" r="3.5" fill="rgba(255,107,53,.5)"/>
+          <line x1="0" y1="-15" x2="0" y2="-20" stroke="rgba(255,107,53,.85)" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="0" y1="7" x2="0" y2="12" stroke="rgba(255,107,53,.85)" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="11" y1="-4" x2="16" y2="-4" stroke="rgba(255,107,53,.85)" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="-11" y1="-4" x2="-16" y2="-4" stroke="rgba(255,107,53,.85)" stroke-width="2.5" stroke-linecap="round"/>
+          <text y="21" text-anchor="middle" font-family="Fira Code,monospace" font-size="7" fill="rgba(255,107,53,.9)" letter-spacing=".5">BUILD</text>
+        </g>
+        <!-- NODE: TEST -->
+        <g transform="translate(322,322)" filter="url(#shad)">
+          <rect x="-27" y="-27" width="54" height="54" rx="13" fill="url(#gO)" stroke="rgba(255,107,53,.6)" stroke-width="1.5"/>
+          <rect x="-25" y="-25" width="50" height="9" rx="8" fill="rgba(255,255,255,.05)"/>
+          <path d="M-7,-17 L-7,-4 L-15,10 A2,2 0 0,0 -13,13 L13,13 A2,2 0 0,0 15,10 L7,-4 L7,-17 Z" fill="rgba(255,107,53,.15)" stroke="rgba(255,107,53,.85)" stroke-width="1.5"/>
+          <line x1="-9" y1="-17" x2="9" y2="-17" stroke="rgba(255,107,53,.7)" stroke-width="1.5"/>
+          <circle cx="-2" cy="5" r="2.5" fill="rgba(255,107,53,.7)"/>
+          <circle cx="5" cy="8" r="1.8" fill="rgba(255,107,53,.45)"/>
+          <text y="21" text-anchor="middle" font-family="Fira Code,monospace" font-size="7" fill="rgba(255,107,53,.9)" letter-spacing=".5">TEST</text>
+        </g>
+        <!-- NODE: RELEASE -->
+        <g transform="translate(200,368)" filter="url(#shad)">
+          <rect x="-27" y="-27" width="54" height="54" rx="13" fill="url(#gG)" stroke="rgba(124,255,164,.6)" stroke-width="1.5"/>
+          <rect x="-25" y="-25" width="50" height="9" rx="8" fill="rgba(255,255,255,.05)"/>
+          <path d="M0,-18 C11,-11 13,-3 11,8 L0,13 L-11,8 C-13,-3 -11,-11 0,-18 Z" fill="rgba(124,255,164,.2)" stroke="rgba(124,255,164,.85)" stroke-width="1.5"/>
+          <circle cx="0" cy="-3" r="4.5" fill="none" stroke="rgba(124,255,164,.85)" stroke-width="1.5"/>
+          <path d="-11,8 L-15,17 L-6,13 Z" fill="rgba(124,255,164,.5)"/>
+          <path d="M11,8 L15,17 L6,13 Z" fill="rgba(124,255,164,.5)"/>
+          <text y="20" text-anchor="middle" font-family="Fira Code,monospace" font-size="6.5" fill="rgba(124,255,164,.9)" letter-spacing=".2">RELEASE</text>
+        </g>
+        <!-- NODE: DEPLOY -->
+        <g transform="translate(78,322)" filter="url(#shad)">
+          <rect x="-27" y="-27" width="54" height="54" rx="13" fill="url(#gG)" stroke="rgba(124,255,164,.6)" stroke-width="1.5"/>
+          <rect x="-25" y="-25" width="50" height="9" rx="8" fill="rgba(255,255,255,.05)"/>
+          <path d="M-14,4 C-17,-4 -8,-12 0,-10 C2,-16 13,-15 15,-7 C19,-6 19,5 13,6 L-11,6 C-15,6 -16,5 -14,4 Z" fill="rgba(124,255,164,.18)" stroke="rgba(124,255,164,.85)" stroke-width="1.5"/>
+          <line x1="0" y1="6" x2="0" y2="14" stroke="rgba(124,255,164,.7)" stroke-width="2"/>
+          <polyline points="-5,10 0,15 5,10" fill="none" stroke="rgba(124,255,164,.7)" stroke-width="2" stroke-linejoin="round"/>
+          <text y="21" text-anchor="middle" font-family="Fira Code,monospace" font-size="7" fill="rgba(124,255,164,.9)" letter-spacing=".2">DEPLOY</text>
+        </g>
+        <!-- NODE: OPERATE -->
+        <g transform="translate(32,200)" filter="url(#shad)">
+          <rect x="-27" y="-27" width="54" height="54" rx="13" fill="url(#gB)" stroke="rgba(0,210,255,.6)" stroke-width="1.5"/>
+          <rect x="-25" y="-25" width="50" height="9" rx="8" fill="rgba(255,255,255,.06)"/>
+          <rect x="-14" y="-16" width="28" height="9" rx="2" fill="none" stroke="rgba(0,210,255,.75)" stroke-width="1.4"/>
+          <circle cx="-8" cy="-11.5" r="2" fill="rgba(0,210,255,.6)"/>
+          <rect x="-14" y="-4" width="28" height="9" rx="2" fill="none" stroke="rgba(0,210,255,.65)" stroke-width="1.4"/>
+          <circle cx="-8" cy=".5" r="2" fill="rgba(0,210,255,.3)"/>
+          <rect x="-14" y="8" width="28" height="9" rx="2" fill="none" stroke="rgba(0,210,255,.55)" stroke-width="1.4"/>
+          <circle cx="-8" cy="12.5" r="2" fill="rgba(124,255,164,.55)"/>
+          <text y="22" text-anchor="middle" font-family="Fira Code,monospace" font-size="5.5" fill="rgba(0,210,255,.9)" letter-spacing=".2">OPERATE</text>
+        </g>
+        <!-- NODE: MONITOR -->
+        <g transform="translate(78,78)" filter="url(#shad)">
+          <rect x="-27" y="-27" width="54" height="54" rx="13" fill="url(#gB)" stroke="rgba(0,210,255,.6)" stroke-width="1.5"/>
+          <rect x="-25" y="-25" width="50" height="9" rx="8" fill="rgba(255,255,255,.06)"/>
+          <rect x="-14" y="4" width="6" height="10" rx="1" fill="rgba(0,210,255,.5)"/>
+          <rect x="-5" y="-4" width="6" height="18" rx="1" fill="rgba(0,210,255,.7)"/>
+          <rect x="4" y="-12" width="6" height="26" rx="1" fill="rgba(0,210,255,.9)"/>
+          <line x1="-16" y1="14" x2="14" y2="14" stroke="rgba(0,210,255,.5)" stroke-width="1"/>
+          <text y="21" text-anchor="middle" font-family="Fira Code,monospace" font-size="5.5" fill="rgba(0,210,255,.9)" letter-spacing=".2">MONITOR</text>
+        </g>
+
+        <!-- CENTER BADGE -->
+        <g class="cf" filter="url(#glow3)">
+          <rect x="156" y="166" width="88" height="68" rx="18" fill="#0c1620" stroke="rgba(0,210,255,.42)" stroke-width="2"/>
+          <rect x="158" y="168" width="84" height="10" rx="9" fill="rgba(255,255,255,.06)"/>
+          <path d="M177,200 C177,192 183,187 192,187 C201,187 205,194 200,200 C205,206 210,213 218,213 C227,213 226,205 223,200 C226,195 221,187 212,187 C203,187 199,194 200,200 C195,206 191,213 183,213 C174,213 172,205 172,200 Z" fill="none" stroke="url(#gAcc)" stroke-width="2.5" stroke-linecap="round"/>
+          <text x="200" y="226" text-anchor="middle" font-family="Manrope,sans-serif" font-size="10" fill="rgba(0,210,255,.88)" font-weight="700" letter-spacing="1">DevOps</text>
+        </g>
+        <!-- floating micro badges -->
+        <g class="gpl"><rect x="142" y="86" width="62" height="18" rx="5" fill="rgba(0,210,255,.1)" stroke="rgba(0,210,255,.3)" stroke-width="1"/><text x="173" y="98" text-anchor="middle" font-family="Fira Code,monospace" font-size="7.5" fill="#00d2ff">Terraform</text></g>
+        <g class="gpl" style="animation-delay:.8s"><rect x="236" y="128" width="62" height="18" rx="5" fill="rgba(255,107,53,.1)" stroke="rgba(255,107,53,.3)" stroke-width="1"/><text x="267" y="140" text-anchor="middle" font-family="Fira Code,monospace" font-size="7.5" fill="#ff6b35">Kubernetes</text></g>
+        <g class="gpl" style="animation-delay:1.6s"><rect x="103" y="268" width="52" height="18" rx="5" fill="rgba(124,255,164,.1)" stroke="rgba(124,255,164,.3)" stroke-width="1"/><text x="129" y="280" text-anchor="middle" font-family="Fira Code,monospace" font-size="7.5" fill="#7cffa4">Ansible</text></g>
+        <g class="gpl" style="animation-delay:.4s"><rect x="242" y="250" width="50" height="18" rx="5" fill="rgba(0,210,255,.1)" stroke="rgba(0,210,255,.3)" stroke-width="1"/><text x="267" y="262" text-anchor="middle" font-family="Fira Code,monospace" font-size="7.5" fill="#00d2ff">Docker</text></g>
+      </svg>
     </div>
   </div>
 </section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="si fade-in"><div class="sn">6+</div><div class="sl2">Years Experience</div></div>
+    <div class="si fade-in"><div class="sn">30%</div><div class="sl2">Deployment Time Cut</div></div>
+    <div class="si fade-in"><div class="sn">15%</div><div class="sl2">Cloud Cost Saved</div></div>
+    <div class="si fade-in"><div class="sn">3</div><div class="sl2">Cloud Platforms</div></div>
+  </div>
+</div>
 
 <!-- ABOUT -->
 <section id="about">
   <div class="fade-in">
-    <div class="section-label">About Me</div>
-    <h2 class="section-title">Automating the<br>mundane. Scaling<br>the impossible.</h2>
-    <div class="about-text">
+    <div class="lbl">About Me</div>
+    <h2 class="sh">Automating the mundane.<br>Scaling the impossible.</h2>
+    <div class="atxt">
       <p>I'm a DevOps Engineer from Tirur, Kerala, with 6+ years of expertise in cloud infrastructure, CI/CD automation, Infrastructure as Code, and site reliability engineering. I specialize in Microsoft Azure and AWS, container orchestration with Kubernetes and Docker, and driving operational efficiency in agile environments.</p>
-      <p>Passionate about reducing toil through automation — from provisioning cloud infrastructure with Terraform and Ansible to building bulletproof CI/CD pipelines that let engineering teams ship with confidence and sleep at night.</p>
+      <p>Passionate about reducing toil through automation — from provisioning cloud infrastructure with Terraform and Ansible to building bulletproof CI/CD pipelines that let engineering teams ship with confidence.</p>
     </div>
-    <div class="cert-badges">
-      <span class="cert-badge">AZ-104: Azure Administrator</span>
-      <span class="cert-badge">AZ-400: DevOps Solutions</span>
+    <div class="cert-row">
+      <span class="cbadge"><svg viewBox="0 0 24 24"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7l-9-5zm-1 14l-3-3 1.41-1.41L11 13.17l5.59-5.58L18 9l-7 7z"/></svg>AZ-104: Azure Administrator</span>
+      <span class="cbadge"><svg viewBox="0 0 24 24"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7l-9-5zm-1 14l-3-3 1.41-1.41L11 13.17l5.59-5.58L18 9l-7 7z"/></svg>AZ-400: DevOps Solutions</span>
     </div>
   </div>
+  <div class="fade-in">
+    <div class="lbl">Journey</div>
+    <h2 class="sh">Career Timeline</h2>
+    <div class="tlm">
+      <div class="tli"><div class="tld"></div><div class="tldate">Nov 2021 – Present</div><div class="tlrole">DevOps Engineer</div><div class="tlco">Phases India Technology Solutions Pvt Ltd</div></div>
+      <div class="tli"><div class="tld"></div><div class="tldate">Dec 2019 – Nov 2021</div><div class="tlrole">IT Engineer</div><div class="tlco">IITS, Techneurons Pvt Ltd</div></div>
+      <div class="tli"><div class="tld"></div><div class="tldate">Education</div><div class="tlrole">BCA · Computer Application</div><div class="tlco">Kerala, India</div></div>
+    </div>
+  </div>
+</section>
 
-  <div class="stats-grid fade-in">
-    <div class="stat">
-      <div class="stat-num">6+</div>
-      <div class="stat-label">Years in DevOps & IT</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">30%</div>
-      <div class="stat-label">Deployment time cut</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">15%</div>
-      <div class="stat-label">Cloud cost reduction</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">3</div>
-      <div class="stat-label">Cloud platforms</div>
-    </div>
-  </div>
+<!-- TECH BADGE SCROLL STRIP -->
+<section id="bstrip">
+  <div class="bstitle">Tech Stack</div>
+  <div style="overflow:hidden"><div class="bscroll" id="bScroll"></div></div>
 </section>
 
 <!-- SKILLS -->
 <section id="skills">
-  <div class="skills-inner">
-    <div class="skills-header fade-in">
-      <div class="section-label" style="justify-content:center;">Skills</div>
-      <h2 class="section-title">Tools of the trade.</h2>
+  <div class="swrap">
+    <div class="fade-in">
+      <div class="lbl">Skills</div>
+      <h2 class="sh">Tools of the trade.</h2>
+      <div class="tabrow">
+        <button class="tbtn on" data-p="cards">Skill Cards</button>
+        <button class="tbtn" data-p="bars">Proficiency Bars</button>
+      </div>
     </div>
-    <div class="skills-grid">
 
-      <div class="skill-card fade-in">
-        <span class="skill-cat-icon">☁️</span>
-        <div class="skill-cat-name">Cloud & Infrastructure</div>
-        <div class="skill-cat-sub">Multi-cloud & IaC</div>
-        <div class="skill-tags">
-          <span class="tag accent">Microsoft Azure</span>
-          <span class="tag accent">AWS</span>
-          <span class="tag accent">Terraform</span>
-          <span class="tag">Ansible</span>
-          <span class="tag">Hetzner Cloud</span>
-          <span class="tag">Proxmox</span>
+    <!-- CARDS -->
+    <div class="spanel on" id="panel-cards">
+      <div class="sgrid">
+        <!-- CLOUD -->
+        <div class="scard fade-in">
+          <svg class="siw" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="sc1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a3a5c"/><stop offset="100%" stop-color="#0a1a2c"/></linearGradient></defs>
+            <rect x="1" y="1" width="50" height="50" rx="13" fill="url(#sc1)" stroke="rgba(0,210,255,.45)" stroke-width="1.5"/>
+            <rect x="2" y="2" width="48" height="10" rx="9" fill="rgba(255,255,255,.06)"/>
+            <path d="M10,34 C6,34 4,28 8,24 C8,18 14,14 20,16 C22,10 30,8 36,12 C42,12 46,18 44,24 C48,26 48,34 44,36 L14,36 C12,36 10,36 10,34 Z" fill="rgba(0,210,255,.18)" stroke="rgba(0,210,255,.78)" stroke-width="1.5"/>
+            <line x1="26" y1="36" x2="26" y2="44" stroke="rgba(0,210,255,.6)" stroke-width="2"/>
+            <polyline points="22,41 26,46 30,41" fill="none" stroke="rgba(0,210,255,.6)" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+          <div class="sname">Cloud & Infrastructure</div><div class="ssub">Multi-cloud · IaC</div>
+          <div class="tags"><span class="tag a">Microsoft Azure</span><span class="tag a">AWS</span><span class="tag a">Terraform</span><span class="tag">Ansible</span><span class="tag">Hetzner Cloud</span><span class="tag">Proxmox</span></div>
+        </div>
+        <!-- CONTAINERS -->
+        <div class="scard fade-in">
+          <svg class="siw" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="sc2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a2e4a"/><stop offset="100%" stop-color="#0a1828"/></linearGradient></defs>
+            <rect x="1" y="1" width="50" height="50" rx="13" fill="url(#sc2)" stroke="rgba(0,210,255,.45)" stroke-width="1.5"/>
+            <rect x="2" y="2" width="48" height="10" rx="9" fill="rgba(255,255,255,.06)"/>
+            <rect x="8" y="14" width="36" height="9" rx="3" fill="rgba(0,210,255,.25)" stroke="rgba(0,210,255,.7)" stroke-width="1.3"/>
+            <rect x="8" y="25" width="36" height="9" rx="3" fill="rgba(0,210,255,.18)" stroke="rgba(0,210,255,.55)" stroke-width="1.3"/>
+            <rect x="8" y="36" width="36" height="7" rx="3" fill="rgba(0,210,255,.1)" stroke="rgba(0,210,255,.38)" stroke-width="1.3"/>
+            <circle cx="14" cy="18.5" r="2.5" fill="rgba(0,210,255,.8)"/>
+            <circle cx="14" cy="29.5" r="2.5" fill="rgba(0,210,255,.6)"/>
+            <circle cx="14" cy="39.5" r="2" fill="rgba(124,255,164,.55)"/>
+          </svg>
+          <div class="sname">Containers & Orchestration</div><div class="ssub">Runtime · Scheduling</div>
+          <div class="tags"><span class="tag a">Kubernetes</span><span class="tag a">Docker</span><span class="tag">High Availability</span><span class="tag">Container Orchestration</span></div>
+        </div>
+        <!-- CI/CD -->
+        <div class="scard fade-in">
+          <svg class="siw" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="sc3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3a1e10"/><stop offset="100%" stop-color="#1c0c04"/></linearGradient></defs>
+            <rect x="1" y="1" width="50" height="50" rx="13" fill="url(#sc3)" stroke="rgba(255,107,53,.45)" stroke-width="1.5"/>
+            <rect x="2" y="2" width="48" height="10" rx="9" fill="rgba(255,255,255,.05)"/>
+            <circle cx="12" cy="26" r="6" fill="rgba(255,107,53,.22)" stroke="rgba(255,107,53,.8)" stroke-width="1.5"/>
+            <line x1="18" y1="26" x2="22" y2="26" stroke="rgba(255,107,53,.55)" stroke-width="1.8" stroke-dasharray="2 2"/>
+            <circle cx="26" cy="26" r="6" fill="rgba(255,107,53,.33)" stroke="rgba(255,107,53,.9)" stroke-width="1.5"/>
+            <line x1="32" y1="26" x2="36" y2="26" stroke="rgba(255,107,53,.55)" stroke-width="1.8" stroke-dasharray="2 2"/>
+            <circle cx="40" cy="26" r="6" fill="rgba(255,107,53,.45)" stroke="rgba(255,107,53,1)" stroke-width="1.5"/>
+            <polyline points="37,22 40,19 43,22" fill="none" stroke="rgba(124,255,164,.85)" stroke-width="1.6" stroke-linejoin="round"/>
+            <line x1="40" y1="19" x2="40" y2="26" stroke="rgba(124,255,164,.65)" stroke-width="1.5"/>
+          </svg>
+          <div class="sname">CI/CD & Version Control</div><div class="ssub">Pipelines · Delivery</div>
+          <div class="tags"><span class="tag b">Azure DevOps</span><span class="tag b">Jenkins</span><span class="tag b">GitHub Actions</span><span class="tag b">GitLab CI</span><span class="tag">Git</span></div>
+        </div>
+        <!-- OS -->
+        <div class="scard fade-in">
+          <svg class="siw" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="sc4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1e1a34"/><stop offset="100%" stop-color="#0e0e1e"/></linearGradient></defs>
+            <rect x="1" y="1" width="50" height="50" rx="13" fill="url(#sc4)" stroke="rgba(170,140,255,.42)" stroke-width="1.5"/>
+            <rect x="2" y="2" width="48" height="10" rx="9" fill="rgba(255,255,255,.05)"/>
+            <rect x="8" y="14" width="36" height="24" rx="4" fill="rgba(0,0,0,.4)" stroke="rgba(170,140,255,.55)" stroke-width="1.3"/>
+            <circle cx="14" cy="20" r="2" fill="#ff5f56"/><circle cx="20" cy="20" r="2" fill="#ffbd2e"/><circle cx="26" cy="20" r="2" fill="#27c93f"/>
+            <text x="11" y="31" font-family="Fira Code,monospace" font-size="7" fill="rgba(170,140,255,.85)">$ ./deploy</text>
+            <text x="11" y="37" font-family="Fira Code,monospace" font-size="6.5" fill="rgba(124,255,164,.75)">✓ success</text>
+          </svg>
+          <div class="sname">OS & Web Servers</div><div class="ssub">Systems · App Stack</div>
+          <div class="tags"><span class="tag">Linux / RHEL / CentOS</span><span class="tag">Ubuntu</span><span class="tag">Windows Server</span><span class="tag">Nginx</span><span class="tag">Apache</span><span class="tag">Tomcat / IIS</span></div>
+        </div>
+        <!-- MONITORING -->
+        <div class="scard fade-in">
+          <svg class="siw" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="sc5" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0e3020"/><stop offset="100%" stop-color="#061410"/></linearGradient></defs>
+            <rect x="1" y="1" width="50" height="50" rx="13" fill="url(#sc5)" stroke="rgba(124,255,164,.42)" stroke-width="1.5"/>
+            <rect x="2" y="2" width="48" height="10" rx="9" fill="rgba(255,255,255,.05)"/>
+            <polyline points="7,30 13,30 17,17 21,39 25,26 30,26 34,15 38,37 42,26 46,26" fill="none" stroke="rgba(124,255,164,.88)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <div class="sname">Monitoring & Security</div><div class="ssub">Observability · Protection</div>
+          <div class="tags"><span class="tag c">Zabbix</span><span class="tag c">Uptime Robot</span><span class="tag c">Veeam</span><span class="tag">Sophos</span><span class="tag">Intune</span><span class="tag">Backup & DR</span></div>
+        </div>
+        <!-- DB/NET -->
+        <div class="scard fade-in">
+          <svg class="siw" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+            <defs><linearGradient id="sc6" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1e2a3a"/><stop offset="100%" stop-color="#0a1220"/></linearGradient></defs>
+            <rect x="1" y="1" width="50" height="50" rx="13" fill="url(#sc6)" stroke="rgba(0,210,255,.38)" stroke-width="1.5"/>
+            <rect x="2" y="2" width="48" height="10" rx="9" fill="rgba(255,255,255,.05)"/>
+            <ellipse cx="26" cy="18" rx="14" ry="5" fill="rgba(0,210,255,.2)" stroke="rgba(0,210,255,.65)" stroke-width="1.3"/>
+            <rect x="12" y="18" width="28" height="10" fill="rgba(0,210,255,.1)" stroke="none"/>
+            <line x1="12" y1="18" x2="12" y2="28" stroke="rgba(0,210,255,.5)" stroke-width="1.3"/>
+            <line x1="40" y1="18" x2="40" y2="28" stroke="rgba(0,210,255,.5)" stroke-width="1.3"/>
+            <ellipse cx="26" cy="28" rx="14" ry="5" fill="rgba(0,210,255,.15)" stroke="rgba(0,210,255,.55)" stroke-width="1.3"/>
+            <ellipse cx="26" cy="36" rx="14" ry="5" fill="rgba(0,210,255,.08)" stroke="rgba(0,210,255,.38)" stroke-width="1.3"/>
+          </svg>
+          <div class="sname">Databases & Networking</div><div class="ssub">Storage · Connectivity</div>
+          <div class="tags"><span class="tag">MongoDB</span><span class="tag">MS SQL Server</span><span class="tag b">CCNA</span><span class="tag b">DNS / TCP-IP</span><span class="tag">Office 365</span></div>
         </div>
       </div>
+    </div>
 
-      <div class="skill-card fade-in">
-        <span class="skill-cat-icon">🐳</span>
-        <div class="skill-cat-name">Containers & Orchestration</div>
-        <div class="skill-cat-sub">Runtime & Scheduling</div>
-        <div class="skill-tags">
-          <span class="tag accent">Kubernetes</span>
-          <span class="tag accent">Docker</span>
-          <span class="tag">Container Orchestration</span>
-          <span class="tag">High Availability</span>
-        </div>
+    <!-- BARS -->
+    <div class="spanel" id="panel-bars">
+      <div class="bgrid" id="barGrid">
+        <div class="bi"><div class="bh"><span class="bn">Microsoft Azure</span><span class="bp2">92%</span></div><div class="btrack"><div class="bfill" data-pct="92"></div></div></div>
+        <div class="bi"><div class="bh"><span class="bn">Kubernetes</span><span class="bp2">88%</span></div><div class="btrack"><div class="bfill" data-pct="88"></div></div></div>
+        <div class="bi"><div class="bh"><span class="bn">Terraform / IaC</span><span class="bp2">90%</span></div><div class="btrack"><div class="bfill" data-pct="90"></div></div></div>
+        <div class="bi"><div class="bh"><span class="bn">Docker</span><span class="bp2">90%</span></div><div class="btrack"><div class="bfill" data-pct="90"></div></div></div>
+        <div class="bi"><div class="bh"><span class="bn">Jenkins / Azure DevOps</span><span class="bp2">87%</span></div><div class="btrack"><div class="bfill b" data-pct="87"></div></div></div>
+        <div class="bi"><div class="bh"><span class="bn">AWS</span><span class="bp2">80%</span></div><div class="btrack"><div class="bfill" data-pct="80"></div></div></div>
+        <div class="bi"><div class="bh"><span class="bn">Ansible</span><span class="bp2">85%</span></div><div class="btrack"><div class="bfill" data-pct="85"></div></div></div>
+        <div class="bi"><div class="bh"><span class="bn">Linux Administration</span><span class="bp2">88%</span></div><div class="btrack"><div class="bfill b" data-pct="88"></div></div></div>
+        <div class="bi"><div class="bh"><span class="bn">Zabbix / Monitoring</span><span class="bp2">82%</span></div><div class="btrack"><div class="bfill c" data-pct="82"></div></div></div>
+        <div class="bi"><div class="bh"><span class="bn">Networking / CCNA</span><span class="bp2">78%</span></div><div class="btrack"><div class="bfill c" data-pct="78"></div></div></div>
       </div>
-
-      <div class="skill-card fade-in">
-        <span class="skill-cat-icon">⚙️</span>
-        <div class="skill-cat-name">CI/CD & Version Control</div>
-        <div class="skill-cat-sub">Pipelines & Delivery</div>
-        <div class="skill-tags">
-          <span class="tag purple">Azure DevOps</span>
-          <span class="tag purple">Jenkins</span>
-          <span class="tag purple">GitHub Actions</span>
-          <span class="tag purple">GitLab CI</span>
-          <span class="tag">Git</span>
-        </div>
-      </div>
-
-      <div class="skill-card fade-in">
-        <span class="skill-cat-icon">🖥️</span>
-        <div class="skill-cat-name">OS & Web Servers</div>
-        <div class="skill-cat-sub">Systems & App Stack</div>
-        <div class="skill-tags">
-          <span class="tag">Linux / CentOS / RHEL</span>
-          <span class="tag">Ubuntu</span>
-          <span class="tag">Windows Server</span>
-          <span class="tag">Nginx</span>
-          <span class="tag">Apache</span>
-          <span class="tag">Tomcat / IIS</span>
-        </div>
-      </div>
-
-      <div class="skill-card fade-in">
-        <span class="skill-cat-icon">📊</span>
-        <div class="skill-cat-name">Monitoring & Security</div>
-        <div class="skill-cat-sub">Observability & Protection</div>
-        <div class="skill-tags">
-          <span class="tag red">Zabbix</span>
-          <span class="tag red">Uptime Robot</span>
-          <span class="tag red">Veeam</span>
-          <span class="tag">Sophos</span>
-          <span class="tag">Intune</span>
-          <span class="tag">Backup & DR</span>
-        </div>
-      </div>
-
-      <div class="skill-card fade-in">
-        <span class="skill-cat-icon">🗄️</span>
-        <div class="skill-cat-name">Databases & Networking</div>
-        <div class="skill-cat-sub">Storage & Connectivity</div>
-        <div class="skill-tags">
-          <span class="tag">MongoDB</span>
-          <span class="tag">MS SQL Server</span>
-          <span class="tag purple">CCNA</span>
-          <span class="tag purple">DNS / TCP-IP</span>
-          <span class="tag">Office 365</span>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
 
+<!-- PIPELINE -->
+<section id="pipeline">
+  <div class="lbl" style="justify-content:center">CI/CD Pipeline</div>
+  <h2 class="sh" style="text-align:center">How I Build &amp; Ship</h2>
+  <svg class="psvg fade-in" viewBox="0 0 920 200" xmlns="http://www.w3.org/2000/svg" style="max-width:920px;width:100%">
+    <defs>
+      <marker id="arr" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="rgba(0,210,255,.65)"/></marker>
+      <linearGradient id="tg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="rgba(0,210,255,.06)"/><stop offset="50%" stop-color="rgba(0,210,255,.16)"/><stop offset="100%" stop-color="rgba(0,210,255,.06)"/></linearGradient>
+      <linearGradient id="nb" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1e3a4a"/><stop offset="100%" stop-color="#0a1520"/></linearGradient>
+      <linearGradient id="no" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3a2010"/><stop offset="100%" stop-color="#1a0e06"/></linearGradient>
+      <linearGradient id="ng" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0e3020"/><stop offset="100%" stop-color="#061810"/></linearGradient>
+    </defs>
+    <line x1="60" y1="95" x2="860" y2="95" stroke="url(#tg)" stroke-width="2"/>
+    <line x1="60" y1="95" x2="860" y2="95" stroke="rgba(0,210,255,.4)" stroke-width="1.5" stroke-dasharray="7 5"><animate attributeName="stroke-dashoffset" from="0" to="-96" dur="2.5s" repeatCount="indefinite"/></line>
+    <!-- CODE -->
+    <g class="pnode" transform="translate(60,95)"><rect x="-32" y="-36" width="64" height="64" rx="13" fill="rgba(0,210,255,.07)" stroke="rgba(0,210,255,.55)" stroke-width="1.5"/><rect x="-30" y="-34" width="60" height="8" rx="7" fill="rgba(255,255,255,.05)"/><polyline points="-12,-16 -18,-4 -12,8" fill="none" stroke="rgba(0,210,255,.85)" stroke-width="2.2" stroke-linejoin="round"/><polyline points="12,-16 18,-4 12,8" fill="none" stroke="rgba(0,210,255,.85)" stroke-width="2.2" stroke-linejoin="round"/><line x1="-4" y1="-16" x2="4" y2="14" stroke="rgba(0,210,255,.38)" stroke-width="1.5"/><text y="22" text-anchor="middle" font-family="Fira Code,monospace" font-size="8" fill="rgba(0,210,255,.85)">CODE</text><text y="46" text-anchor="middle" font-family="Fira Code,monospace" font-size="7" fill="rgba(255,255,255,.28)">Git</text><line x1="32" y1="0" x2="58" y2="0" stroke="rgba(0,210,255,.5)" stroke-width="1.5" marker-end="url(#arr)"/></g>
+    <!-- BUILD -->
+    <g class="pnode-o" transform="translate(175,95)"><rect x="-32" y="-36" width="64" height="64" rx="13" fill="rgba(255,107,53,.07)" stroke="rgba(255,107,53,.55)" stroke-width="1.5"/><rect x="-30" y="-34" width="60" height="8" rx="7" fill="rgba(255,255,255,.05)"/><circle cx="0" cy="-4" r="10" fill="none" stroke="rgba(255,107,53,.85)" stroke-width="1.8"/><circle cx="0" cy="-4" r="3.5" fill="rgba(255,107,53,.5)"/><line x1="0" y1="-15" x2="0" y2="-20" stroke="rgba(255,107,53,.85)" stroke-width="2.5" stroke-linecap="round"/><line x1="0" y1="7" x2="0" y2="12" stroke="rgba(255,107,53,.85)" stroke-width="2.5" stroke-linecap="round"/><line x1="11" y1="-4" x2="16" y2="-4" stroke="rgba(255,107,53,.85)" stroke-width="2.5" stroke-linecap="round"/><line x1="-11" y1="-4" x2="-16" y2="-4" stroke="rgba(255,107,53,.85)" stroke-width="2.5" stroke-linecap="round"/><text y="22" text-anchor="middle" font-family="Fira Code,monospace" font-size="8" fill="rgba(255,107,53,.85)">BUILD</text><text y="46" text-anchor="middle" font-family="Fira Code,monospace" font-size="7" fill="rgba(255,255,255,.28)">Jenkins</text><line x1="32" y1="0" x2="58" y2="0" stroke="rgba(0,210,255,.5)" stroke-width="1.5" marker-end="url(#arr)"/></g>
+    <!-- TEST -->
+    <g class="pnode-o" transform="translate(290,95)"><rect x="-32" y="-36" width="64" height="64" rx="13" fill="rgba(255,107,53,.07)" stroke="rgba(255,107,53,.55)" stroke-width="1.5"/><rect x="-30" y="-34" width="60" height="8" rx="7" fill="rgba(255,255,255,.05)"/><path d="M-7,-18 L-7,-4 L-15,10 A2,2 0 0,0 -13,13 L13,13 A2,2 0 0,0 15,10 L7,-4 L7,-18 Z" fill="rgba(255,107,53,.15)" stroke="rgba(255,107,53,.85)" stroke-width="1.5"/><line x1="-9" y1="-18" x2="9" y2="-18" stroke="rgba(255,107,53,.7)" stroke-width="1.5"/><circle cx="-2" cy="4" r="2.5" fill="rgba(255,107,53,.7)"/><text y="22" text-anchor="middle" font-family="Fira Code,monospace" font-size="8" fill="rgba(255,107,53,.85)">TEST</text><text y="46" text-anchor="middle" font-family="Fira Code,monospace" font-size="7" fill="rgba(255,255,255,.28)">Unit/Int</text><line x1="32" y1="0" x2="58" y2="0" stroke="rgba(0,210,255,.5)" stroke-width="1.5" marker-end="url(#arr)"/></g>
+    <!-- PACKAGE -->
+    <g class="pnode" transform="translate(405,95)"><rect x="-32" y="-36" width="64" height="64" rx="13" fill="rgba(0,210,255,.07)" stroke="rgba(0,210,255,.55)" stroke-width="1.5"/><rect x="-30" y="-34" width="60" height="8" rx="7" fill="rgba(255,255,255,.05)"/><rect x="-14" y="-22" width="28" height="20" rx="3" fill="rgba(0,210,255,.18)" stroke="rgba(0,210,255,.75)" stroke-width="1.3"/><rect x="-14" y="1" width="28" height="11" rx="3" fill="rgba(0,210,255,.1)" stroke="rgba(0,210,255,.55)" stroke-width="1.3"/><line x1="0" y1="-22" x2="0" y2="-12" stroke="rgba(0,210,255,.5)" stroke-width="1"/><text y="21" text-anchor="middle" font-family="Fira Code,monospace" font-size="7.5" fill="rgba(0,210,255,.85)">PACKAGE</text><text y="46" text-anchor="middle" font-family="Fira Code,monospace" font-size="7" fill="rgba(255,255,255,.28)">Docker</text><line x1="32" y1="0" x2="58" y2="0" stroke="rgba(0,210,255,.5)" stroke-width="1.5" marker-end="url(#arr)"/></g>
+    <!-- PROVISION -->
+    <g class="pnode-g" transform="translate(520,95)"><rect x="-32" y="-36" width="64" height="64" rx="13" fill="rgba(124,255,164,.07)" stroke="rgba(124,255,164,.55)" stroke-width="1.5"/><rect x="-30" y="-34" width="60" height="8" rx="7" fill="rgba(255,255,255,.05)"/><rect x="-16" y="-18" width="32" height="20" rx="3" fill="none" stroke="rgba(124,255,164,.7)" stroke-width="1.5"/><line x1="-8" y1="-12" x2="8" y2="-12" stroke="rgba(124,255,164,.6)" stroke-width="1.3"/><line x1="-8" y1="-7" x2="8" y2="-7" stroke="rgba(124,255,164,.5)" stroke-width="1.3"/><line x1="-8" y1="-2" x2="3" y2="-2" stroke="rgba(124,255,164,.4)" stroke-width="1.3"/><path d="M-8,8 L0,14 L8,8" fill="none" stroke="rgba(124,255,164,.7)" stroke-width="1.5" stroke-linejoin="round"/><text y="21" text-anchor="middle" font-family="Fira Code,monospace" font-size="7" fill="rgba(124,255,164,.85)">PROVISION</text><text y="46" text-anchor="middle" font-family="Fira Code,monospace" font-size="7" fill="rgba(255,255,255,.28)">Terraform</text><line x1="32" y1="0" x2="58" y2="0" stroke="rgba(0,210,255,.5)" stroke-width="1.5" marker-end="url(#arr)"/></g>
+    <!-- DEPLOY -->
+    <g class="pnode-g" transform="translate(635,95)"><rect x="-32" y="-36" width="64" height="64" rx="13" fill="rgba(124,255,164,.07)" stroke="rgba(124,255,164,.55)" stroke-width="1.5"/><rect x="-30" y="-34" width="60" height="8" rx="7" fill="rgba(255,255,255,.05)"/><path d="M0,-22 C10,-14 12,-5 10,7 L0,12 L-10,7 C-12,-5 -10,-14 0,-22 Z" fill="rgba(124,255,164,.2)" stroke="rgba(124,255,164,.85)" stroke-width="1.5"/><circle cx="0" cy="-5" r="4.5" fill="none" stroke="rgba(124,255,164,.85)" stroke-width="1.5"/><text y="22" text-anchor="middle" font-family="Fira Code,monospace" font-size="8" fill="rgba(124,255,164,.85)">DEPLOY</text><text y="46" text-anchor="middle" font-family="Fira Code,monospace" font-size="7" fill="rgba(255,255,255,.28)">K8s / Azure</text><line x1="32" y1="0" x2="58" y2="0" stroke="rgba(0,210,255,.5)" stroke-width="1.5" marker-end="url(#arr)"/></g>
+    <!-- MONITOR -->
+    <g class="pnode" transform="translate(750,95)"><rect x="-32" y="-36" width="64" height="64" rx="13" fill="rgba(0,210,255,.07)" stroke="rgba(0,210,255,.55)" stroke-width="1.5"/><rect x="-30" y="-34" width="60" height="8" rx="7" fill="rgba(255,255,255,.05)"/><polyline points="-20,4 -12,4 -8,-10 -4,14 0,2 5,2 9,-12 13,8 18,2 24,2" fill="none" stroke="rgba(0,210,255,.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><text y="22" text-anchor="middle" font-family="Fira Code,monospace" font-size="7.5" fill="rgba(0,210,255,.85)">MONITOR</text><text y="46" text-anchor="middle" font-family="Fira Code,monospace" font-size="7" fill="rgba(255,255,255,.28)">Zabbix</text><line x1="32" y1="0" x2="58" y2="0" stroke="rgba(0,210,255,.5)" stroke-width="1.5" marker-end="url(#arr)"/></g>
+    <!-- FEEDBACK -->
+    <g class="pnode" transform="translate(860,95)"><rect x="-32" y="-36" width="64" height="64" rx="13" fill="rgba(0,210,255,.07)" stroke="rgba(0,210,255,.55)" stroke-width="1.5"/><rect x="-30" y="-34" width="60" height="8" rx="7" fill="rgba(255,255,255,.05)"/><path d="M14,-8 A16,16 0 1,1 -14,-8" fill="none" stroke="rgba(0,210,255,.85)" stroke-width="2"/><polyline points="-14,-14 -14,-8 -8,-8" fill="none" stroke="rgba(0,210,255,.85)" stroke-width="2" stroke-linejoin="round"/><text y="22" text-anchor="middle" font-family="Fira Code,monospace" font-size="7" fill="rgba(0,210,255,.85)">FEEDBACK</text><text y="46" text-anchor="middle" font-family="Fira Code,monospace" font-size="7" fill="rgba(255,255,255,.28)">Iterate</text></g>
+  </svg>
+</section>
+
 <!-- EXPERIENCE -->
 <section id="experience">
-  <div class="exp-header fade-in">
-    <div class="section-label">Work Experience</div>
-    <h2 class="section-title">Where I've shipped.</h2>
-  </div>
-
-  <div class="timeline">
-
-    <div class="exp-item fade-in">
-      <div class="exp-dot"></div>
-      <div class="exp-meta">
-        <span class="exp-period">Nov 2021 – Present</span>
-        <span class="exp-company">Phases India Technology Solutions Pvt Ltd · Full-time</span>
-      </div>
-      <div class="exp-role">DevOps Engineer</div>
-      <ul class="exp-bullets">
-        <li>Implemented CI/CD pipelines using Jenkins, Azure DevOps, Git, and Docker — reducing deployment time by 30% and improving release efficiency.</li>
-        <li>Managed multi-cloud infrastructure across Microsoft Azure, AWS, and Hetzner, optimizing resources and reducing cloud costs by 15%.</li>
-        <li>Deployed and managed containerized applications with Docker and Kubernetes, ensuring high availability across development and production environments.</li>
-        <li>Automated infrastructure provisioning with Terraform (IaC), ensuring consistency, repeatability, and scalability across all environments.</li>
-        <li>Automated server provisioning and configuration management using Ansible, minimizing manual effort and improving deployment reliability.</li>
-        <li>Implemented backup and disaster recovery strategies using Veeam and Proxmox, ensuring data protection and business continuity.</li>
-        <li>Monitored infrastructure using Zabbix and Uptime Robot, resolving incidents within SLA targets.</li>
-      </ul>
-      <div class="exp-highlights">
-        <span class="tag accent">Azure DevOps</span>
-        <span class="tag accent">Kubernetes</span>
-        <span class="tag accent">Terraform</span>
-        <span class="tag purple">Jenkins</span>
-        <span class="tag">Ansible</span>
-        <span class="tag">Docker</span>
-        <span class="tag">AWS</span>
-        <span class="tag">Hetzner</span>
-        <span class="tag red">Zabbix</span>
-        <span class="tag">Veeam</span>
+  <div class="lbl fade-in">Work Experience</div>
+  <h2 class="sh fade-in">Where I've shipped.</h2>
+  <div class="tml">
+    <div class="ei fade-in">
+      <div class="edot"></div>
+      <div class="emeta"><span class="eperiod">Nov 2021 – Present</span><span class="eco">Phases India Technology Solutions Pvt Ltd · Full-time</span></div>
+      <div class="erole">DevOps Engineer</div>
+      <div class="ecard">
+        <ul class="eul">
+          <li>Implemented CI/CD pipelines using Jenkins, Azure DevOps, Git, and Docker — reducing deployment time by 30% and improving release efficiency.</li>
+          <li>Managed multi-cloud infrastructure across Microsoft Azure, AWS, and Hetzner, optimizing resources and reducing cloud costs by 15%.</li>
+          <li>Deployed and managed containerized applications with Docker and Kubernetes, ensuring high availability across development and production environments.</li>
+          <li>Automated infrastructure provisioning with Terraform (IaC), ensuring consistency, repeatability, and scalability across all environments.</li>
+          <li>Automated server provisioning and configuration management using Ansible, minimizing manual effort and improving deployment reliability.</li>
+          <li>Implemented backup and disaster recovery strategies using Veeam and Proxmox, ensuring data protection and business continuity.</li>
+          <li>Monitored infrastructure using Zabbix and Uptime Robot, resolving incidents within SLA targets.</li>
+        </ul>
+        <div class="etags"><span class="tag a">Azure DevOps</span><span class="tag a">Kubernetes</span><span class="tag a">Terraform</span><span class="tag b">Jenkins</span><span class="tag">Ansible</span><span class="tag">Docker</span><span class="tag">AWS</span><span class="tag">Hetzner</span><span class="tag c">Zabbix</span><span class="tag">Veeam</span></div>
       </div>
     </div>
-
-    <div class="exp-item fade-in">
-      <div class="exp-dot"></div>
-      <div class="exp-meta">
-        <span class="exp-period">Dec 2019 – Nov 2021</span>
-        <span class="exp-company">IITS, Techneurons Pvt Ltd · Full-time</span>
-      </div>
-      <div class="exp-role">IT Engineer</div>
-      <ul class="exp-bullets">
-        <li>Managed Windows/Linux servers and enterprise IT infrastructure including system configuration and maintenance.</li>
-        <li>Administered Office 365 services — user accounts, mailboxes, and security policies.</li>
-        <li>Supported cloud environments on Microsoft Azure and AWS including VM provisioning and resource monitoring.</li>
-        <li>Improved network performance by 25% through configuration optimization and infrastructure monitoring.</li>
-        <li>Assisted in migration of on-premise infrastructure to AWS cloud, improving scalability and reliability.</li>
-      </ul>
-      <div class="exp-highlights">
-        <span class="tag accent">Microsoft Azure</span>
-        <span class="tag accent">AWS</span>
-        <span class="tag">Office 365</span>
-        <span class="tag">Linux</span>
-        <span class="tag">Windows Server</span>
-        <span class="tag purple">Networking</span>
+    <div class="ei fade-in">
+      <div class="edot"></div>
+      <div class="emeta"><span class="eperiod">Dec 2019 – Nov 2021</span><span class="eco">IITS, Techneurons Pvt Ltd · Full-time</span></div>
+      <div class="erole">IT Engineer</div>
+      <div class="ecard">
+        <ul class="eul">
+          <li>Managed Windows/Linux servers and enterprise IT infrastructure including system configuration and maintenance.</li>
+          <li>Administered Office 365 services — user accounts, mailboxes, and security policies.</li>
+          <li>Supported cloud environments on Microsoft Azure and AWS including VM provisioning and resource monitoring.</li>
+          <li>Improved network performance by 25% through configuration optimization and infrastructure monitoring.</li>
+          <li>Assisted in migration of on-premise infrastructure to AWS cloud, improving scalability and reliability.</li>
+        </ul>
+        <div class="etags"><span class="tag a">Microsoft Azure</span><span class="tag a">AWS</span><span class="tag">Office 365</span><span class="tag">Linux</span><span class="tag">Windows Server</span><span class="tag b">Networking</span></div>
       </div>
     </div>
-
   </div>
 </section>
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="contact-inner">
-    <div class="section-label" style="justify-content:center;margin-bottom:1.5rem;">Contact</div>
-    <h2 class="contact-headline fade-in">Let's build<br><span class="hl">something great.</span></h2>
-    <p class="contact-sub fade-in">Open to DevOps, Cloud, and Platform Engineering roles. Whether you want to talk Kubernetes, CI/CD strategy, or just say hello — I'm always up for a conversation.</p>
-    <div class="contact-links fade-in">
-      <a href="mailto:fairozcp007@gmail.com" class="contact-link">
-        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-        fairozcp007@gmail.com
-      </a>
-      <a href="https://www.linkedin.com/in/fairozcp" target="_blank" class="contact-link">
-        <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 011.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
-        LinkedIn
-      </a>
-      <a href="tel:+919645840008" class="contact-link">
-        <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-        +91 96458 40008
-      </a>
+  <div class="cwrap">
+    <div class="lbl" style="justify-content:center;margin-bottom:1.4rem">Contact</div>
+    <h2 class="ch fade-in">Let's build<br><span class="hl">something great.</span></h2>
+    <p class="csub fade-in">Open to DevOps, Cloud, and Platform Engineering roles. Whether you want to talk Kubernetes, CI/CD strategy, or just say hello — I'm always up for a conversation.</p>
+    <div class="clgrid fade-in">
+      <a href="mailto:fairozcp007@gmail.com" class="clink"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span>fairozcp007@gmail.com</span></a>
+      <a href="https://www.linkedin.com/in/fairozcp" target="_blank" class="clink"><svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 011.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg><span>linkedin.com/in/fairozcp</span></a>
+      <a href="tel:+919645840008" class="clink"><svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg><span>+91 96458 40008</span></a>
     </div>
-    <a href="mailto:fairozcp007@gmail.com" class="btn btn-primary">Say Hello →</a>
+    <a href="mailto:fairozcp007@gmail.com" class="btn bp">Say Hello →</a>
   </div>
 </section>
 
-<footer>
-  <span>© 2025 Fairoz CP. Built with intention.</span>
-  <span>Tirur, Kerala, India 🇮🇳</span>
-</footer>
+<footer><span>© 2025 Fairoz CP — Built with intention.</span><span>Tirur, Kerala, India 🇮🇳</span></footer>
 
 <script>
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 80);
-        observer.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+/* THEME */
+const ht=document.documentElement,tb=document.getElementById('tBtn'),ti=document.getElementById('tIco');
+let dk=true;
+tb.addEventListener('click',()=>{dk=!dk;ht.setAttribute('data-theme',dk?'dark':'light');ti.textContent=dk?'🌙':'☀️'});
+
+/* TYPING */
+const phr=['DevOps Engineer','Cloud Architect','CI/CD Specialist','Kubernetes Engineer','IaC Practitioner','SRE Advocate'];
+let pi=0,ci=0,del=false;
+const tel=document.getElementById('tTxt');
+function type(){const c=phr[pi];if(!del){tel.textContent=c.substring(0,ci+1);ci++;if(ci===c.length){del=true;setTimeout(type,2100);return}}else{tel.textContent=c.substring(0,ci-1);ci--;if(ci===0){del=false;pi=(pi+1)%phr.length}}setTimeout(type,del?52:88)}
+type();
+
+/* FADE */
+const ob=new IntersectionObserver((es)=>{es.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('vis'),i*65);ob.unobserve(e.target)}})},{threshold:.08});
+document.querySelectorAll('.fade-in').forEach(e=>ob.observe(e));
+
+/* TABS */
+document.querySelectorAll('.tbtn').forEach(b=>{b.addEventListener('click',()=>{document.querySelectorAll('.tbtn').forEach(x=>x.classList.remove('on'));document.querySelectorAll('.spanel').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.getElementById('panel-'+b.dataset.p).classList.add('on');if(b.dataset.p==='bars')animB()})});
+
+/* BARS */
+let bd=false;
+function animB(){if(bd)return;bd=true;document.querySelectorAll('.bfill').forEach((b,i)=>{setTimeout(()=>{b.style.width=b.dataset.pct+'%'},i*90)})}
+
+/* CV */
+document.getElementById('cvBtn').addEventListener('click',e=>{e.preventDefault();alert('Update the Download CV button href with your actual CV file URL.')});
+
+/* NAV ACTIVE */
+const scs=document.querySelectorAll('section[id]'),nas=document.querySelectorAll('nav a[href^="#"]');
+window.addEventListener('scroll',()=>{let cur='';scs.forEach(s=>{if(window.scrollY>=s.offsetTop-130)cur=s.id});nas.forEach(a=>{a.style.color=a.getAttribute('href')==='#'+cur?'var(--ac)':''})},{passive:true});
+
+/* BADGE STRIP */
+const stack=[
+  {l:'Azure',c:'#00d2ff',s:`<rect x="3" y="3" width="30" height="30" rx="7" fill="rgba(0,210,255,.12)" stroke="rgba(0,210,255,.6)" stroke-width="1.5"/><path d="M9,27 L17,8 L25,20 L21,20 L17,13 L13,25 Z" fill="rgba(0,210,255,.7)"/><line x1="11" y1="27" x2="24" y2="27" stroke="rgba(0,210,255,.7)" stroke-width="1.5"/>`},
+  {l:'AWS',c:'#ff9900',s:`<rect x="3" y="3" width="30" height="30" rx="7" fill="rgba(255,153,0,.12)" stroke="rgba(255,153,0,.6)" stroke-width="1.5"/><path d="M9,24 C9,20 11,14 18,14 C25,14 27,20 27,24" fill="none" stroke="rgba(255,153,0,.8)" stroke-width="2"/><path d="M6,27 C9,31 26,31 30,27" fill="none" stroke="rgba(255,153,0,.65)" stroke-width="1.5"/>`},
+  {l:'Kubernetes',c:'#326ce5',s:`<rect x="3" y="3" width="30" height="30" rx="7" fill="rgba(50,108,229,.12)" stroke="rgba(50,108,229,.6)" stroke-width="1.5"/><circle cx="18" cy="18" r="8" fill="none" stroke="rgba(50,108,229,.8)" stroke-width="1.5"/><line x1="18" y1="9" x2="18" y2="7" stroke="rgba(50,108,229,.7)" stroke-width="2"/><line x1="18" y1="27" x2="18" y2="29" stroke="rgba(50,108,229,.7)" stroke-width="2"/><line x1="9" y1="18" x2="7" y2="18" stroke="rgba(50,108,229,.7)" stroke-width="2"/><line x1="27" y1="18" x2="29" y2="18" stroke="rgba(50,108,229,.7)" stroke-width="2"/>`},
+  {l:'Docker',c:'#2496ed',s:`<rect x="3" y="3" width="30" height="30" rx="7" fill="rgba(36,150,237,.12)" stroke="rgba(36,150,237,.6)" stroke-width="1.5"/><rect x="7" y="14" width="6" height="6" rx="1" fill="rgba(36,150,237,.7)"/><rect x="15" y="14" width="6" height="6" rx="1" fill="rgba(36,150,237,.7)"/><rect x="23" y="14" width="6" height="6" rx="1" fill="rgba(36,150,237,.5)"/><rect x="15" y="22" width="6" height="6" rx="1" fill="rgba(36,150,237,.5)"/>`},
+  {l:'Terraform',c:'#7b42bc',s:`<rect x="3" y="3" width="30" height="30" rx="7" fill="rgba(123,66,188,.12)" stroke="rgba(123,66,188,.6)" stroke-width="1.5"/><path d="M10,10 L10,22 L20,17 Z" fill="rgba(123,66,188,.75)"/><path d="M22,8 L22,20 L32,15 Z" fill="rgba(123,66,188,.5)"/><path d="M10,24 L22,24 L22,28 L10,28 Z" fill="rgba(123,66,188,.55)"/>`},
+  {l:'Jenkins',c:'#d24939',s:`<rect x="3" y="3" width="30" height="30" rx="7" fill="rgba(210,73,57,.12)" stroke="rgba(210,73,57,.6)" stroke-width="1.5"/><circle cx="18" cy="16" r="7" fill="none" stroke="rgba(210,73,57,.8)" stroke-width="1.5"/><line x1="14" y1="20" x2="14" y2="27" stroke="rgba(210,73,57,.7)" stroke-width="2"/><line x1="22" y1="20" x2="22" y2="27" stroke="rgba(210,73,57,.7)" stroke-width="2"/><line x1="14" y1="27" x2="22" y2="27" stroke="rgba(210,73,57,.7)" stroke-width="2"/>`},
+  {l:'Ansible',c:'#e00',s:`<rect x="3" y="3" width="30" height="30" rx="7" fill="rgba(220,0,0,.1)" stroke="rgba(220,0,0,.55)" stroke-width="1.5"/><circle cx="18" cy="18" r="8" fill="none" stroke="rgba(220,0,0,.8)" stroke-width="1.5"/><path d="M14,25 L22,10 L22,25" fill="none" stroke="rgba(220,0,0,.8)" stroke-width="2" stroke-linejoin="round"/>`},
+  {l:'GitLab',c:'#fc6d26',s:`<rect x="3" y="3" width="30" height="30" rx="7" fill="rgba(252,109,38,.1)" stroke="rgba(252,109,38,.55)" stroke-width="1.5"/><path d="M18,27 L7,18 L10,9 L14,18 L18,12 L22,18 L26,9 L29,18 Z" fill="rgba(252,109,38,.7)" stroke="rgba(252,109,38,.4)" stroke-width=".5"/>`},
+  {l:'GitHub',c:'#ccc',s:`<rect x="3" y="3" width="30" height="30" rx="7" fill="rgba(200,200,200,.07)" stroke="rgba(200,200,200,.4)" stroke-width="1.5"/><path d="M18,8 a10,10 0 0,0 -3.16,19.49 c.5.09.68-.22.68-.48l0-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1,.07 1.53,1.03 1.53,1.03 .89,1.52 2.34,1.08 2.91.83 .09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0,0 .84-.27 2.75,1.02A9.56,9.56 0 0,1 18,12.8 a9.56,9.56 0 0,1 2.5.34 c1.91-1.29 2.75-1.02 2.75-1.02 .55,1.37.2,2.39.1,2.64 .64.7 1.03,1.59 1.03,2.68 0,3.84-2.34,4.68-4.57,4.93 .36.31.68.92.68,1.85l0,2.74c0 .27.18.58.69.48A10,10 0 0,0 18,8Z" fill="rgba(200,200,200,.7)"/>`},
+  {l:'Zabbix',c:'#d40000',s:`<rect x="3" y="3" width="30" height="30" rx="7" fill="rgba(212,0,0,.1)" stroke="rgba(212,0,0,.5)" stroke-width="1.5"/><polyline points="6,26 11,15 15,22 19,11 23,20 28,13" fill="none" stroke="rgba(212,0,0,.88)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`},
+  {l:'Linux',c:'#ffd133',s:`<rect x="3" y="3" width="30" height="30" rx="7" fill="rgba(255,209,51,.1)" stroke="rgba(255,209,51,.5)" stroke-width="1.5"/><circle cx="18" cy="14" r="6" fill="rgba(255,209,51,.22)" stroke="rgba(255,209,51,.75)" stroke-width="1.5"/><circle cx="15" cy="13" r="1.5" fill="rgba(255,209,51,.9)"/><circle cx="21" cy="13" r="1.5" fill="rgba(255,209,51,.9)"/><path d="M15,17 Q18,21 21,17" fill="none" stroke="rgba(255,209,51,.8)" stroke-width="1.5"/><line x1="14" y1="20" x2="12" y2="29" stroke="rgba(255,209,51,.6)" stroke-width="2"/><line x1="22" y1="20" x2="24" y2="29" stroke="rgba(255,209,51,.6)" stroke-width="2"/>`},
+  {l:'Nginx',c:'#009639',s:`<rect x="3" y="3" width="30" height="30" rx="7" fill="rgba(0,150,57,.1)" stroke="rgba(0,150,57,.5)" stroke-width="1.5"/><path d="M18,7 L29,27 L7,27 Z" fill="none" stroke="rgba(0,150,57,.85)" stroke-width="2"/><line x1="18" y1="7" x2="18" y2="27" stroke="rgba(0,150,57,.6)" stroke-width="1.5"/>`},
+  {l:'MongoDB',c:'#47a248',s:`<rect x="3" y="3" width="30" height="30" rx="7" fill="rgba(71,162,72,.1)" stroke="rgba(71,162,72,.5)" stroke-width="1.5"/><path d="M18,7 C23,12 25,17 23,23 C21,27 15,27 13,23 C11,17 13,12 18,7 Z" fill="rgba(71,162,72,.38)" stroke="rgba(71,162,72,.8)" stroke-width="1.5"/><line x1="18" y1="23" x2="18" y2="30" stroke="rgba(71,162,72,.7)" stroke-width="2"/>`},
+  {l:'Veeam',c:'#00b336',s:`<rect x="3" y="3" width="30" height="30" rx="7" fill="rgba(0,179,54,.1)" stroke="rgba(0,179,54,.5)" stroke-width="1.5"/><polyline points="9,18 15,25 27,11" fill="none" stroke="rgba(0,179,54,.92)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`},
+  {l:'Proxmox',c:'#e57000',s:`<rect x="3" y="3" width="30" height="30" rx="7" fill="rgba(229,112,0,.1)" stroke="rgba(229,112,0,.5)" stroke-width="1.5"/><polygon points="18,8 28,13 28,23 18,28 8,23 8,13" fill="none" stroke="rgba(229,112,0,.8)" stroke-width="1.5"/><circle cx="18" cy="18" r="4" fill="rgba(229,112,0,.5)"/>`},
+];
+const sc=document.getElementById('bScroll');
+const mk=t=>`<div class="tbadge"><svg viewBox="0 0 36 36" width="36" height="36" xmlns="http://www.w3.org/2000/svg">${t.s}</svg><span style="color:${t.c}">${t.l}</span></div>`;
+sc.innerHTML=stack.map(mk).join('')+stack.map(mk).join('');
 </script>
 </body>
 </html>
